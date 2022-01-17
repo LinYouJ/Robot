@@ -1,11 +1,12 @@
 import numpy as np
 from math import atan2,degrees,sin
+from time import sleep
 
 class Robot():
     def __init__(self):
         self.Robot_fpos=np.array([0,0],dtype="float16")
         self.Robot_cpos=np.array([0,0],dtype="float16")
-    
+     
     def getFront(self):
         return self.Robot_fpos
     
@@ -15,11 +16,13 @@ class Robot():
     def turnTO(self,direction):
         if(direction=='right'):
             print("向右調整")
+            sleep(1)
         elif(direction=="left"):
             print("向左調整")
+            sleep(1)
 
     def move(self,pathlen):
-        if(pathlen<8): 
+        if(pathlen<10): 
             print("停止，開始瞄準")
             return 1
         elif(pathlen<15): 
