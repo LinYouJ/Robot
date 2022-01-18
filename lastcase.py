@@ -4,7 +4,7 @@ from object.ball import Ball
 from object.robot import Robot
 from object.robot import Enemy
 
-robot=Robot()
+robot=Robot('a')
 ball=Ball()
 enemy=Enemy()
 Gate=np.array([0,-170]) 
@@ -12,14 +12,7 @@ top_left=np.array([-90,170])  #客場球門左右角落
 top_right=np.array([90,170])
 
 def aim_Gate(): 
-        #正踢
-        ##更新座標##
         print("更新座標點")
-        # robot.Robot_cpos[0],robot.Robot_cpos[1]=input("input robot center coordinate:").split()
-        # robot.Robot_fpos[0],robot.Robot_fpos[1]=input("input robot front coordinate:").split()
-        # ball.ball_pos[0],ball.ball_pos[1]=input("input ball coordinate:").split()
-        # enemy.enemy_pos[0],enemy.enemy_pos[1]=input("input enemy coordinate:").split()
-        ##
         Robotcenter=robot.getCenter() 
         Robotfront=robot.getFront()
         Ballpoint=ball.ballPos()
@@ -97,21 +90,22 @@ def scouting():
 
 decide=0   
 while True: 
-    #測試
-    # start=str(input("輸入任意Y 或 y開始動作:"))
-    # if(start!='Y' and start!='y'):
-    #     break
-    # robot.Robot_cpos[0],robot.Robot_cpos[1]=input("input robot center coordinate:").split()
-    # robot.Robot_fpos[0],robot.Robot_fpos[1]=input("input robot front coordinate:").split()
-    # ball.ball_pos[0],ball.ball_pos[1]=input("input ball coordinate:").split()
-    # enemy.enemy_pos[0],enemy.enemy_pos[1]=input("input enemy coordinate:").split()
-
     #主程式
-    Robotcenter=robot.getCenter()
-    Robotfront=robot.getFront()
-    Ballpoint=ball.ballPos()
     Targetpoint=ball.targetPos(Gatepoint=Gate)
     enemypoint=enemy.coordinate()
+    Ballpoint=ball.ballPos()
+    
+    robot_a=Robot('a')
+    robot_b=Robot('b')
+    robot_c=Robot('c')
+    robot_distance=[]
+    robot_serial=['a','b','c']
+    for i in robot_serial:
+        center=eval(f"robot_{i}.getCenter()")
+        robot_distance.append(math.dist(center,Ballpoint))
+    robot=eval(f"robot_{robot_serial[robot_distance.index(min(robot_distance))]}")
+    Robotcenter=robot.getCenter()
+    Robotfront=robot.getFront()
 
     if(Gate[1]*-1) >=0:   #座標固定時，進攻方向改變
         Robotcenter*=-1
@@ -142,9 +136,10 @@ while True:
     ctr2front=math.hypot(Robotfront[0]-Robotcenter[0],Robotfront[1]-Robotcenter[1])
     front2Target=math.hypot(Targetpoint[0]-Robotfront[0],Targetpoint[1]-Robotfront[1])
     diff_cos=(ctr2Tar**2+ctr2front**2-front2Target**2)/(2*ctr2Tar*ctr2front)
-    # print(RT_deg)
-    # print(Robotdeg)
-    #print(Targetpoint)
+   
+    print(robot.name)
+    print(Robotcenter)
+    print(Targetpoint)
 
     #運算區
     print("目標點位置[%.2f,%.2f]"%(RT_deg,ctr2Tar)) 
