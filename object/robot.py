@@ -2,10 +2,10 @@ import numpy as np
 from math import atan2,degrees,sin
 
 class Robot():
-    def __init__(self):
+    def __init__(self,name=None):
         self.Robot_fpos=np.array([0,0],dtype="float16")
         self.Robot_cpos=np.array([0,0],dtype="float16")
-     
+        self.name=name
     def getFront(self):
         return self.Robot_fpos
     
@@ -14,6 +14,7 @@ class Robot():
     
     def turnTO(self,direction):
         if(direction=='right'):
+            self.Robot_fpos
             print("向右調整")
         elif(direction=="left"):
             print("向左調整")
@@ -43,22 +44,6 @@ class Robot():
             elif(BR_deg>GB_deg):
                 print("左踢")
 
-    def y_walk(self,pathlen):
-        if(pathlen<8):
-            print("開始瞄準球門")
-            return 1
-        elif(pathlen<15):
-            print("開始減速")
-            return 2
-        else:
-            print('前進')
-            return 0
-
-    def x_walk(self,theta): 
-        if(theta>60 and theta<90):
-            print("開始減速")
-        else:
-            print("前進")
 
 class Enemy():
     def __init__(self):
