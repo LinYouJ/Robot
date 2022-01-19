@@ -3,15 +3,21 @@ import math
 from object.ball import Ball
 from object.robot import Robot
 from object.robot import Enemy
+from random import randint as rint
 
-robot=Robot('a')
+robot=Robot()
 ball=Ball()
 enemy=Enemy()
 Gate=np.array([0,-170]) 
-top_left=np.array([-90,170])  #客場球門左右角落
-top_right=np.array([90,170])
+Gate_left=np.array([Gate[0]-40,Gate[1]])  #客場球門左右角落
+Gate_right=np.array([Gate[0]+40,Gate[1]])
 
 def aim_Gate(): 
+        print("踢球機器人:"+robot.name)
+        #測試
+        # robot.Robot_cpos=np.array([rint(-90,90),rint(-170,170)])
+        # robot.Robot_fpos=np.array([rint(-90,90)+rint(-2,2),rint(-170,170)+rint(-2,2)])
+        #
         print("更新座標點")
         Robotcenter=robot.getCenter() 
         Robotfront=robot.getFront()
@@ -28,7 +34,7 @@ def aim_Gate():
         if(Robotdeg<0):
             Robotdeg+=360
         RBdiff=Robotdeg-RB_deg
-        print("座標差:%d"%RBdiff)
+        print("角度差:%d"%RBdiff)
         if(RBdiff<15 and RBdiff>-15):
             result=robot.move(ctr2ball)
             if(result==1):
@@ -49,14 +55,19 @@ def aim_Target(rotate):
         else:
             result=robot.move(ctr2Tar)
             scout=scouting()
-            if(result==1 or result==2):
-                if(result==1 and scout=='safe'):
-                    aim_Gate()
-                elif(scout=='danger'):
-                    print("路線不通")
-                    return 1 #更改目標點
-                else:
-                    print("繼續通行")
+            #
+            if(result==1):
+                aim_Gate()
+            else:
+                print("繼續前進")
+            # if(result==1 or result==2):
+            #     if(result==1 and scout=='safe'):
+            #         aim_Gate()
+            #     elif(scout=='danger'):
+            #         print("路線不通")
+            #         return 1 #更改目標點
+            #     else:
+            #         print("繼續通行")
 
     elif(rotate=="left"): #左轉限定 
         if(diff_cos<0.9 and diff_cos>-1):
@@ -64,14 +75,19 @@ def aim_Target(rotate):
         else:
             result=robot.move(ctr2Tar)
             scout=scouting()
-            if(result==1 or result==2):
-                if(result==1 and scout=='safe'):
-                    aim_Gate()
-                elif(scout=='danger'):
-                    print("路線不通")
-                    return 1  #更改目標點
-                else:
-                    print("繼續通行")
+            #
+            if(result==1):
+                aim_Gate()
+            else:
+                print("繼續前進")
+            # if(result==1 or result==2):
+            #     if(result==1 and scout=='safe'):
+            #         aim_Gate()
+            #     elif(scout=='danger'):
+            #         print("路線不通")
+            #         return 1  #更改目標點
+            #     else:
+            #         print("繼續通行")
             
 def scouting():
     global Ballpoint
@@ -88,8 +104,14 @@ def scouting():
     else:
         return 'safe'
 
-decide=0   
+#decide=0   
 while True: 
+    #測試
+    # ball.ball_pos[0],ball.ball_pos[1]=input("ball coordinate:").split()
+    # enemy.enemy_pos[0],enemy.enemy_pos[1]=input("enemy.coordinate:").split()
+    # ball.ball_pos[0],ball.ball_pos[1]=np.array([-30,70])
+    # enemy.enemy_pos[0],enemy.enemy_pos[1]=np.array([45,70])
+    #
     #主程式
     Targetpoint=ball.targetPos(Gatepoint=Gate)
     enemypoint=enemy.coordinate()
@@ -100,30 +122,40 @@ while True:
     robot_c=Robot('c')
     robot_distance=[]
     robot_serial=['a','b','c']
+
+    #測試
+    # robot_a.Robot_cpos=np.array([rint(-90,90),rint(-170,170)])
+    # robot_b.Robot_cpos=np.array([rint(-90,90),rint(-170,170)])
+    # robot_c.Robot_cpos=np.array([rint(-90,90),rint(-170,170)]) 
+    # robot_a.Robot_fpos=np.array([rint(-90,90)+rint(-2,2),rint(-170,170)+rint(-2,2)])
+    # robot_b.Robot_fpos=np.array([rint(-90,90)+rint(-2,2),rint(-170,170)+rint(-2,2)])
+    # robot_c.Robot_fpos=np.array([rint(-90,90)+rint(-2,2),rint(-170,170)+rint(-2,2)]) 
+    #
+
     for i in robot_serial:
         center=eval(f"robot_{i}.getCenter()")
         robot_distance.append(math.dist(center,Ballpoint))
     robot=eval(f"robot_{robot_serial[robot_distance.index(min(robot_distance))]}")
+    
     Robotcenter=robot.getCenter()
     Robotfront=robot.getFront()
-
     if(Gate[1]*-1) >=0:   #座標固定時，進攻方向改變
         Robotcenter*=-1
         Robotfront*=-1
         Ballpoint*=-1
         Targetpoint*=-1
         enemypoint*=-1
-        top_left*=-1
-        top_right*=-1
+        Gate_left*=-1
+        Gate_right*=-1
 
-    if(decide==1): #更改目標點
-        print("更改目標點") #以邊界角為目標點
-        LEFT_LEN=math.hypot(top_left[0]-Robotcenter[0],top_left[1]-Robotcenter[1])
-        RIGHT_LEN=math.hypot(top_right[0]-Robotcenter[0],top_right[1]-Robotcenter[1])
-        if(LEFT_LEN<RIGHT_LEN):
-            Targetpoint=top_left
-        else:
-            Targetpoint=top_right
+    # if(decide==1): #更改目標點
+    #     print("更改目標點") #以球門邊界為目標點
+    #     LEFT_LEN=math.hypot(Gate_left[0]-Robotcenter[0],Gate_left[1]-Robotcenter[1])
+    #     RIGHT_LEN=math.hypot(Gate_right[0]-Robotcenter[0],Gate_right[1]-Robotcenter[1])
+    #     if(LEFT_LEN<RIGHT_LEN):
+    #         Targetpoint=ball.targetPos(Gate_left)
+    #     else:
+    #         Targetpoint=ball.targetPos(Gate_right)
 
     RT_deg=math.degrees(math.atan2(Targetpoint[1]-Robotcenter[1],Targetpoint[0]-Robotcenter[0]))  
     if(RT_deg<0):
@@ -133,10 +165,10 @@ while True:
         Robotdeg=Robotdeg+360
     RTdiff=Robotdeg-RT_deg
     ctr2Tar=math.hypot(Targetpoint[0]-Robotcenter[0],Targetpoint[1]-Robotcenter[1])
-    ctr2front=math.hypot(Robotfront[0]-Robotcenter[0],Robotfront[1]-Robotcenter[1])
-    front2Target=math.hypot(Targetpoint[0]-Robotfront[0],Targetpoint[1]-Robotfront[1])
-    diff_cos=(ctr2Tar**2+ctr2front**2-front2Target**2)/(2*ctr2Tar*ctr2front)
-   
+    # ctr2front=math.hypot(Robotfront[0]-Robotcenter[0],Robotfront[1]-Robotcenter[1])
+    # front2Target=math.hypot(Targetpoint[0]-Robotfront[0],Targetpoint[1]-Robotfront[1])
+    #diff_cos=(ctr2Tar**2+ctr2front**2-front2Target**2)/(2*ctr2Tar*ctr2front)
+    diff_cos=math.cos(RTdiff)
     print(robot.name)
     print(Robotcenter)
     print(Targetpoint)
@@ -175,6 +207,6 @@ while True:
             decide=aim_Target("right")  
     
     #decide重置
-    decide=0
+    #decide=0
     print("=================")
 
