@@ -2,7 +2,7 @@ import numpy as np
 import math
 class Ball():
     def __init__(self):
-        self.ball_pos=np.array([0,0],dtype="float16")
+        self.ball_pos=np.array([690,490],dtype="float16")
         self.target_pos=np.array([0,0],dtype="float16")
     
     def ballPos(self):

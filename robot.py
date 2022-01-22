@@ -1,20 +1,17 @@
 import numpy as np
-from math import atan2,degrees,sin
-
+from math import atan2,degrees,sin,cos
+from time import sleep
 class Robot():
     def __init__(self,name=None):
-        self.Robot_fpos=np.array([0,0],dtype="float16")
-        self.Robot_cpos=np.array([0,0],dtype="float16")
         self.name=name
-    def getFront(self):
-        return self.Robot_fpos
-    
+        self.Robot_cpos=np.array([0,0],dtype="float16")
+        
     def getCenter(self):
         return self.Robot_cpos
     
     def turnTO(self,direction):
         if(direction=='right'):
-            self.Robot_fpos
+            #self.Robot_fpos
             print("向右調整")
         elif(direction=="left"):
             print("向左調整")
@@ -26,7 +23,7 @@ class Robot():
         elif(pathlen<15): 
             print('開始減速')
             return 2
-        else:
+        else: 
             print("前進")
             return 0
 
@@ -39,14 +36,14 @@ class Robot():
         elif(BR_deg>GB_deg and kick_area>5):
             print("左側移")
         else:
+            sleep(3)
             if(BR_deg<GB_deg):
                 print("右踢")
             elif(BR_deg>GB_deg):
                 print("左踢")
 
-
 class Enemy():
     def __init__(self):
-        self.enemy_pos=np.array([0,0],dtype="float16")
+        self.enemy_pos=np.array([50,50],dtype="float16")
     def coordinate(self):
         return self.enemy_pos
