@@ -11,7 +11,15 @@ class Ball():
     def targetPos(self,Gatepoint):
         GB_vec=np.array([self.ball_pos[0]-Gatepoint[0],self.ball_pos[1]-Gatepoint[1]],dtype="float16")
         GB_unit=GB_vec/math.hypot(self.ball_pos[0]-Gatepoint[0],self.ball_pos[1]-Gatepoint[1])
-        GB_unit*=2
+        GB_unit*=5
         self.target_pos[0]=self.ball_pos[0]+GB_unit[0]
         self.target_pos[1]=self.ball_pos[1]+GB_unit[1]
+        return self.target_pos
+    
+    def attack_track(self,Gatepoint,attackerpoint):
+        attacker_vec=np.array([attackerpoint[0]-Gatepoint[0],attackerpoint[1]-Gatepoint[1]],dtype="float16")
+        attacker_unit=attacker_vec/math.hypot(attackerpoint[0]-Gatepoint[0],attackerpoint[1]-Gatepoint[1])
+        attacker_unit*=5
+        self.target_pos[0]=attackerpoint[0]+attacker_unit[0]
+        self.target_pos[1]=attackerpoint[1]+attacker_unit[1]
         return self.target_pos
