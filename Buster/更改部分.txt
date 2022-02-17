@@ -1,0 +1,6 @@
+直接對上去的話
+TX_PIN  14
+RX_PIN  15
+
+在custom_setup()
+btkey_init()

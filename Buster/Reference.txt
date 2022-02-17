@@ -1,0 +1,4 @@
+HC12測試:
+	https://www.yiboard.com/thread-998-1-1.html
+HC12工程檔案:
+	https://www.elecrow.com/download/HC-12.pdf
